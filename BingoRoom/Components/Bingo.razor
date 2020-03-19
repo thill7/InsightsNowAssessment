@@ -18,15 +18,35 @@
                 <Card MyCard="@card"></Card>
                 @if (card.CountSquaresRemaining <= 1)
                 {
-                    <button @onclick="@(e => CallBingo(card))" class="btn btn-success">Call Bingo</button>
+                    <button @onclick="@(e => CallBingo(card))" class="btn btn-success btn-block">Call Bingo</button>
                 }
             </div>
         </div>
     }
 </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="input-group w-100">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Check Number</span>
+            </div>
+            <input type="number" class="form-control" value=@_numberToCheck @onchange=@(e => SetNumberToCheck(e.Value.ToString())) min="1" max="75" />
+            <div class="input-group-append">
+                <button @onclick="CheckNumber" class="btn btn-success">Check Number</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (_checkMessage != String.Empty)
+{
+    <p class="alert alert-info">@_checkMessage</p>
+}
 
 @code {
     private Bingo75.Game MyGame;
+    private int _numberToCheck = 1;
+    private string _checkMessage = String.Empty;
 
     private void CallBall()
     {
@@ -38,7 +58,7 @@
                 card.Check(MyGame.CalledNumbers.Last());
             }
         }
-        catch(Exception e)
+        catch (Exception e)
         {
         }
     }
@@ -51,16 +71,21 @@
     private void HandCard()
     {
         MyGame.HandCard();
-        foreach (var called in MyGame.CalledNumbers)
-        {
-            MyGame.Cards.Last().Check(called);
-        }
-
     }
 
     private void CallBingo(IGame.ICard card)
     {
         MyGame.CallBingo(card);
+    }
+
+    private void CheckNumber()
+    {
+        _checkMessage = MyGame.CalledNumbers.Contains(_numberToCheck) ? "Number Found!" : "Number Not Found.";
+    }
+
+    private void SetNumberToCheck(string number)
+    {
+        int.TryParse(number, out _numberToCheck);
     }
 
     protected override void OnInitialized()

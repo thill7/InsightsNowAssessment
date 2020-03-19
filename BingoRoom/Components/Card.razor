@@ -14,13 +14,13 @@
         }
         <td>@Squares[(i * 5) + 3]</td>
         <td>@Squares[(i * 5) + 4]</td>
-
     </tr>
     }
 </table>
 
 @code {
     [Parameter] public IGame.ICard MyCard { get; set; }
+    private Dictionary<int, bool> _checked;
     private List<int> Squares;
 
     protected override void OnInitialized()
