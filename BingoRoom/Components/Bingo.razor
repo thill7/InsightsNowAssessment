@@ -24,6 +24,11 @@
         </div>
     }
 </div>
+@if(_winMessage != String.Empty)
+{
+<p class="my-4 alert alert-info">@_winMessage</p>
+}
+
 <div class="row">
     <div class="col-md-12">
         <div class="input-group w-100">
@@ -47,6 +52,7 @@
     private Bingo75.Game MyGame;
     private int _numberToCheck = 1;
     private string _checkMessage = String.Empty;
+    private string _winMessage = String.Empty;
 
     private void CallBall()
     {
@@ -66,6 +72,7 @@
     private void RestartGame()
     {
         MyGame.Restart();
+        _winMessage = String.Empty;
     }
 
     private void HandCard()
@@ -75,7 +82,8 @@
 
     private void CallBingo(IGame.ICard card)
     {
-        MyGame.CallBingo(card);
+        var winner = MyGame.CallBingo(card);
+        _winMessage = winner ? "You won!" : "Try again...";
     }
 
     private void CheckNumber()
