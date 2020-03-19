@@ -19,8 +19,9 @@ namespace BingoRoom
         public void ConfigureServices(IServiceCollection services)
         {
             // TODO Dependency Injection goes here
-
+            services.AddSingleton<IGame>(g => new Game());
             services.AddControllersWithViews();
+            services.AddServerSideBlazor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +39,8 @@ namespace BingoRoom
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapBlazorHub();
             });
         }
     }

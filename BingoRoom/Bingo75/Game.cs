@@ -36,11 +36,11 @@ namespace BingoRoom.Bingo75
         /// <returns>If the bingo was called successfully</returns>
         public bool CallBingo(IGame.ICard card)
         {
-            if (!(card is Card myCard)) return false;
-            if (!_cards.Contains(myCard)) return false;
+            if (!(card is Card)) return false;
+            if (!_cards.Contains(card)) return false;
 
             // Validate
-            var valid = _calledNumbers.All(n => card.Squares.Contains(n));
+            var valid = card.Squares.All(s => _calledNumbers.Contains(s));
             if (valid)
             {
                 // Bingo!

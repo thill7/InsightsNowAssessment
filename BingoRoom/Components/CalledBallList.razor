@@ -1,0 +1,11 @@
+﻿<ol class="column-list">
+    @foreach(var ball in CalledBalls)
+    {
+        <li>@ball</li>
+    }
+</ol>
+
+@code {
+    [Parameter]
+    public IEnumerable<int> CalledBalls { get; set; }
+}
