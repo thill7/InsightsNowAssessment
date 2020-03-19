@@ -1,22 +1,66 @@
 ﻿@using Bingo75
-@inject IGame Game 
-<h3>Bingo</h3>
+@inject IGame Game
+<h3 class="display-4 w-100 text-center">Bingo!</h3>
 
-<CalledBallList CalledBalls="@MyGame.CalledNumbers"/>
-<button @onclick="CallBall" class="btn btn-success">Call Ball</button>
-<button @onclick="RestartGame" class="btn btn-danger">Restart Game</button>
+<div class="btn-group w-100 my-4">
+    <button @onclick="CallBall" class="btn btn-success">Call Ball</button>
+    <button @onclick="RestartGame" class="btn btn-danger">Restart Game</button>
+    <button @onclick="HandCard" class="btn btn-info">Hand Card</button>
+</div>
+
+<CalledBallList CalledBalls="@MyGame.CalledNumbers" />
+<div class="row">
+    @foreach (var card in MyGame.Cards)
+    {
+        <div class="col-md-6">
+            <div class="bg-secondary p-2 m-2 rounded">
+                <p class="alert alert-info">Remaining: @(card.CountSquaresRemaining)</p>
+                <Card MyCard="@card"></Card>
+                @if (card.CountSquaresRemaining <= 1)
+                {
+                    <button @onclick="@(e => CallBingo(card))" class="btn btn-success">Call Bingo</button>
+                }
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     private Bingo75.Game MyGame;
 
     private void CallBall()
     {
-        MyGame.CallBall();
+        try
+        {
+            MyGame.CallBall();
+            foreach (var card in MyGame.Cards)
+            {
+                card.Check(MyGame.CalledNumbers.Last());
+            }
+        }
+        catch(Exception e)
+        {
+        }
     }
 
     private void RestartGame()
     {
         MyGame.Restart();
+    }
+
+    private void HandCard()
+    {
+        MyGame.HandCard();
+        foreach (var called in MyGame.CalledNumbers)
+        {
+            MyGame.Cards.Last().Check(called);
+        }
+
+    }
+
+    private void CallBingo(IGame.ICard card)
+    {
+        MyGame.CallBingo(card);
     }
 
     protected override void OnInitialized()

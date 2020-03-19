@@ -40,3 +40,5 @@ C:\Users\thill\Documents\homework\InsightsNowAssessment\BingoRoom\obj\Debug\netc
 C:\Users\thill\Documents\homework\InsightsNowAssessment\BingoRoom\obj\Debug\netcoreapp3.1\BingoRoom.pdb
 C:\Users\thill\Documents\homework\InsightsNowAssessment\BingoRoom\obj\Debug\netcoreapp3.1\BingoRoom.genruntimeconfig.cache
 C:\Users\thill\Documents\homework\InsightsNowAssessment\BingoRoom\obj\Debug\netcoreapp3.1\BingoRoom.csproj.CopyComplete
+C:\Users\thill\Documents\homework\InsightsNowAssessment\BingoRoom\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\Card.razor.g.cs
+C:\Users\thill\Documents\homework\InsightsNowAssessment\BingoRoom\obj\Debug\netcoreapp3.1\Razor\Components\Card.razor.g.cs
