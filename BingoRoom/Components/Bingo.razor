@@ -1,0 +1,26 @@
+﻿@using Bingo75
+@inject IGame Game 
+<h3>Bingo</h3>
+
+<CalledBallList CalledBalls="@MyGame.CalledNumbers"/>
+<button @onclick="CallBall" class="btn btn-success">Call Ball</button>
+<button @onclick="RestartGame" class="btn btn-danger">Restart Game</button>
+
+@code {
+    private Bingo75.Game MyGame;
+
+    private void CallBall()
+    {
+        MyGame.CallBall();
+    }
+
+    private void RestartGame()
+    {
+        MyGame.Restart();
+    }
+
+    protected override void OnInitialized()
+    {
+        MyGame = (Bingo75.Game)Game;
+    }
+}
