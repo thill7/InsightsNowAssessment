@@ -1,5 +1,4 @@
-﻿@using Bingo75
-@inject IGame Game
+﻿@inject IGame Game
 <h3 class="display-4 w-100 text-center">Bingo!</h3>
 
 <div class="btn-group w-100 my-4">
@@ -8,108 +7,47 @@
     <button @onclick="HandCard" class="btn btn-info">Hand Card</button>
 </div>
 
-<CalledBallList CalledBalls="@MyGame.CalledNumbers" />
+<CalledBallList CalledBalls="@Game.CalledNumbers"/>
 <div class="row">
-    @foreach (var card in MyGame.Cards)
+    @foreach (var card in Game.Cards)
     {
         <div class="col-md-6">
-            <div class="bg-secondary p-2 m-2 rounded">
-                <p class="alert alert-info">Remaining: @(card.CountSquaresRemaining)</p>
-                <Card MyCard="@card"></Card>
-                @if (card.CountSquaresRemaining <= 1)
-                {
-                    <button @onclick="@(e => CallBingo(card))" class="btn btn-success btn-block">Call Bingo</button>
-                }
-            </div>
+            <Card MyCard="@card" BingoComponent="@this"></Card>
         </div>
     }
 </div>
-@if(_winMessage != String.Empty)
+@if (_winMessage != string.Empty)
 {
-<p class="my-4 alert alert-info">@_winMessage</p>
-}
-
-<div class="row">
-    <div class="col-md-12">
-        <div class="input-group w-100">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Check Number</span>
-            </div>
-            <input type="number" class="form-control" @onfocus="ClearNumberCheckMessage" value=@_numberToCheck @onchange=@(e => SetNumberToCheck(e.Value.ToString())) min="1" max="75" />
-            <div class="input-group-append">
-                @if(MyGame.CalledNumbers.Count() > 0)
-                {
-                    <button @onclick="CheckNumber" class="btn btn-success">Check Number</button>
-                }
-                else
-                {
-                    <button class="btn btn-success" disabled>Check Number</button>
-                }
-            </div>
-        </div>
-    </div>
-</div>
-
-@if (_checkMessage != String.Empty)
-{
-    <p class="alert alert-info">@_checkMessage</p>
+    <p class="my-4 alert alert-info">@_winMessage</p>
 }
 
 @code {
-    private Bingo75.Game MyGame;
-    private int _numberToCheck = 1;
-    private string _checkMessage = String.Empty;
     private string _winMessage = String.Empty;
 
     private void CallBall()
     {
-        try
-        {
-            MyGame.CallBall();
-            foreach (var card in MyGame.Cards)
-            {
-                card.Check(MyGame.CalledNumbers.Last());
-            }
-        }
-        catch (Exception e)
-        {
-        }
+        Game.CallBall();
+    //if (Game.Cards == null) return;
+    //foreach (var card in Game.Cards)
+    //{
+    //    card.Check(Game.CalledNumbers.Last());
+    //}
     }
 
     private void RestartGame()
     {
-        MyGame.Restart();
+        Game.Restart();
         _winMessage = String.Empty;
     }
 
     private void HandCard()
     {
-        MyGame.HandCard();
+        Game.HandCard();
     }
 
-    private void CallBingo(IGame.ICard card)
+    public void CallBingo(IGame.ICard card)
     {
-        var winner = MyGame.CallBingo(card);
+        var winner = Game.CallBingo(card);
         _winMessage = winner ? "You won!" : "Try again...";
-    }
-
-    private void CheckNumber()
-    {
-        _checkMessage = MyGame.CalledNumbers.Contains(_numberToCheck) ? "Number Found!" : "Number Not Found.";
-    }
-
-    private void SetNumberToCheck(string number)
-    {
-        int.TryParse(number, out _numberToCheck);
-    }
-
-    private void ClearNumberCheckMessage()
-    {
-        _checkMessage = String.Empty;
-    }
-
-    protected override void OnInitialized()
-    {
-        MyGame = (Bingo75.Game)Game;
     }
 }

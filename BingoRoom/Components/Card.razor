@@ -1,31 +1,61 @@
-﻿<table class="table table-info">
-    @for(int i = 0; i < Squares.Count / 5; i++)
+﻿@using BingoRoom.Bingo75
+<div class="bg-secondary p-2 m-2 rounded">
+    <p class="alert alert-info">Remaining: @(MyCard.CountSquaresRemaining)</p>
+    <table class="table table-info">
+        @for (var i = 0; i < Rows; i++)
+        {
+            <tr>
+                @for (var j = 0; j < Columns; j++)
+                {
+                    if (_squares.Count <= i * Columns + j)
+                    {
+                        break;
+                    }
+                    var square = _squares[i * Columns + j];
+                    <td>
+                        @if (MyCard.IsChecked(square))
+                        {
+                            <button disabled class="btn btn-success btn-block">@square</button>
+                        }
+                        else
+                        {
+                            <button @onclick="@(e => CheckSquare(square))" class="btn btn-success btn-block">@square</button>
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+    @if (MyCard.CountSquaresRemaining <= 1)
     {
-    <tr>
-        <td>@Squares[(i * 5) + 0]</td>
-        <td>@Squares[(i * 5) + 1]</td>
-        @if ((i * 5) + 2 == 12)
-        {
-            <td>FREE</td>
-        }
-        else
-        {
-            <td>@Squares[(i * 5) + 2]</td>
-        }
-        <td>@Squares[(i * 5) + 3]</td>
-        <td>@Squares[(i * 5) + 4]</td>
-    </tr>
+        <button @onclick="@(e => CallBingo())" class="btn btn-success btn-block">Call Bingo</button>
     }
-</table>
+</div>
 
 @code {
-    [Parameter] public IGame.ICard MyCard { get; set; }
-    private Dictionary<int, bool> _checked;
-    private List<int> Squares;
+
+    [Parameter]
+    public Bingo BingoComponent { get; set; }
+
+    [Parameter]
+    public IGame.ICard MyCard { get; set; }
+
+    private List<int> _squares;
+        private const int Columns = 5;
+    private int Rows => (int) Math.Ceiling(1.0 * _squares.Count / Columns);
 
     protected override void OnInitialized()
     {
-        Squares = MyCard.Squares.ToList<int>();
-        Squares.Insert(12, -1);
+        _squares = MyCard.Squares.OrderBy(n => n).ToList();
+    }
+
+    private void CheckSquare(int square)
+    {
+        MyCard.Check(square);
+    }
+
+    private void CallBingo()
+    {
+        BingoComponent.CallBingo(MyCard);
     }
 }

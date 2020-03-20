@@ -64,6 +64,12 @@ namespace BingoRoom.Bingo75
             CountSquaresRemaining--;
         }
 
+        public bool IsChecked(int number)
+        {
+            return SquareStatuses.TryGetValue(number, out var status) 
+                   && status == SquareStatus.Checked;
+        }
+
         public enum SquareStatus
         {
             Checked,
