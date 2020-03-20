@@ -18,8 +18,7 @@ namespace BingoRoom
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO Dependency Injection goes here
-            services.AddSingleton<IGame>(g => new Game());
+            services.AddSingleton<IGame, Game>();
             services.AddControllersWithViews();
             services.AddServerSideBlazor();
         }
